@@ -4,12 +4,13 @@ import {
   ArrowRight, Download, Mail, MapPin, GraduationCap, Target, Heart,
   Code2, Database, BrainCircuit, Cloud, ExternalLink,
   Menu, X, Sparkles, BriefcaseBusiness, ChevronUp,
-  BarChart3, GitBranch, HardDrive, Monitor, TerminalSquare
+  BarChart3, GitBranch, HardDrive, Monitor, TerminalSquare,
+  CalendarDays, Megaphone, Users
 } from 'lucide-react';
 import './styles.css';
 
 const navItems = [
-  ['accueil', 'Accueil'], ['apropos', 'À propos'], ['competences', 'Compétences'],
+  ['accueil', 'Accueil'], ['apropos', 'À propos'], ['competences', 'Compétences'], ['engagements', 'Engagements'],
   ['projets', 'Projets'], ['experiences', 'Expériences'], ['formation', 'Formation'], ['contact', 'Contact']
 ];
 
@@ -157,6 +158,75 @@ function App() {
                 <span>{name}</span>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section id="engagements" className="engagement section">
+          <SectionTitle icon="♡" title="Mes engagements associatifs" />
+
+          <div className="association-card">
+            <div className="association-header">
+              <div className="association-logo">AJEGT</div>
+
+              <div>
+                <h3>Association des Jeunes et Étudiants Guinéens de Toulouse</h3>
+                <p>AJEGT · Toulouse</p>
+              </div>
+            </div>
+
+            <p className="association-intro">
+              Mon engagement au sein de l’AJEGT me permet de participer à la vie associative étudiante tout en développant mes compétences en organisation, communication, gestion de projets et travail en équipe.
+            </p>
+
+            <div className="association-roles">
+              <div className="association-role">
+                <div className="association-icon event">
+                  <CalendarDays size={22} />
+                </div>
+
+                <div>
+                  <div className="role-top">
+                    <h4>Responsable adjointe du pôle événementiel</h4>
+                    <span>2025 – 2026</span>
+                  </div>
+
+                  <p>
+                    Participation à la conception et à l’organisation des événements de l’association, coordination des activités et collaboration avec les différents membres du bureau.
+                  </p>
+
+                  <div className="association-tags">
+                    <span>Organisation</span>
+                    <span>Événementiel</span>
+                    <span>Coordination</span>
+                    <span>Travail en équipe</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="association-role">
+                <div className="association-icon communication">
+                  <Megaphone size={22} />
+                </div>
+
+                <div>
+                  <div className="role-top">
+                    <h4>Chargée de communication</h4>
+                    <span>2026 – aujourd’hui</span>
+                  </div>
+
+                  <p>
+                    Participation à la stratégie de communication de l’association, création de contenus pour les réseaux sociaux, promotion des événements et développement de la visibilité de l’AJEGT.
+                  </p>
+
+                  <div className="association-tags">
+                    <span>Communication</span>
+                    <span>Réseaux sociaux</span>
+                    <span>Création de contenu</span>
+                    <span>Organisation</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
