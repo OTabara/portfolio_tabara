@@ -1,0 +1,2 @@
+Photo personnelle intégrée : public/images/oumou.jpg
+La photo fournie a été utilisée telle quelle, sans retouche.
