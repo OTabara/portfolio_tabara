@@ -40,7 +40,8 @@ const projects = [
   {
     title: 'ERP / site AJEGT', type: 'Projet web', tone: 'beige', icon: '⌘',
     text: 'Conception d’un outil web pour historiser les bureaux, événements et informations d’une association étudiante.',
-    tags: ['React', 'Node.js', 'TypeScript', 'PostgreSQL']
+    tags: ['React', 'Node.js', 'TypeScript', 'PostgreSQL'],
+    link: 'https://github.com/OTabara/erp-ajegt'
   },
 ];
 
@@ -63,11 +64,33 @@ function scrollToId(id) {
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showTop, setShowTop] = useState(false);
+  const [activeSection, setActiveSection] = useState('accueil');
 
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > 500);
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setMenuOpen(false);
+    };
+    const sections = navItems
+      .map(([id]) => document.getElementById(id))
+      .filter(Boolean);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleSection = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visibleSection) setActiveSection(visibleSection.target.id);
+      },
+      { rootMargin: '-20% 0px -60% 0px', threshold: [0, 0.25, 0.5, 1] }
+    );
+    sections.forEach((section) => observer.observe(section));
     window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('keydown', onKeyDown);
+      observer.disconnect();
+    };
   }, []);
 
   const go = (id) => { scrollToId(id); setMenuOpen(false); };
@@ -78,13 +101,19 @@ function App() {
         <a className="brand" href="#accueil" aria-label="Accueil">
           <span>OT</span>D
         </a>
-        <nav className={menuOpen ? 'open' : ''}>
-          {navItems.map(([id, label]) => <button key={id} onClick={() => go(id)}>{label}</button>)}
+        <nav id="main-navigation" className={menuOpen ? 'open' : ''}>
+          {navItems.map(([id, label]) => <button className={activeSection === id ? 'active' : ''} aria-current={activeSection === id ? 'page' : undefined} key={id} onClick={() => go(id)}>{label}</button>)}
         </nav>
         <a className="cv" href="/cv.pdf" download>
           <Download size={16} /> Télécharger mon CV
         </a>
-        <button className="menu-btn" onClick={() => setMenuOpen(v => !v)} aria-label="Menu">
+        <button
+          className="menu-btn"
+          onClick={() => setMenuOpen(v => !v)}
+          aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+          aria-expanded={menuOpen}
+          aria-controls="main-navigation"
+        >
           {menuOpen ? <X /> : <Menu />}
         </button>
       </header>
@@ -100,8 +129,8 @@ function App() {
             <h2>Étudiante en Master 2 MIAGE <span>|</span> Développement • Data • IA • DevOps</h2>
             <p>
               Curieuse et polyvalente, je m’intéresse aux différentes facettes de l’informatique.
-              Je recherche un stage pour mettre mes compétences en pratique, découvrir de nouvelles technologies
-              et contribuer à des projets concrets.
+              Je recherche un stage de fin d’études d’une durée minimale de 5 mois à partir de mi-mars,
+              afin de mettre mes compétences en pratique, découvrir de nouvelles technologies et contribuer à des projets concrets.
             </p>
             <div className="actions">
               <button className="primary" onClick={() => go('projets')}>Voir mes projets <ArrowRight size={17} /></button>
@@ -114,7 +143,15 @@ function App() {
 
           <div className="portrait-wrap">
             <div className="portrait-frame">
-              <img src="/images/oumou.jpg" alt="Portrait d'Oumou Tabara Diallo" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement.classList.add('empty'); }} />
+              <img
+                src="/images/oumou.jpg"
+                alt="Portrait d'Oumou Tabara Diallo"
+                width="1152"
+                height="2048"
+                decoding="async"
+                fetchPriority="high"
+                onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement.classList.add('empty'); }}
+              />
               <div className="portrait-fallback">Ta photo ici</div>
               <div className="code-overlay" style={{ top: '16px', right: '14px', left: 'auto', bottom: 'auto', width: '190px', borderRadius: 0 }} aria-label="Extrait de code">
                 <div className="code-header" aria-hidden="true">
@@ -137,8 +174,8 @@ function App() {
 
         <section className="quick section">
           <Info icon={GraduationCap} title="Master 2 MIAGE" sub="Université Toulouse Capitole" badge="En cours" />
-          <Info icon={MapPin} title="Toulouse, France" sub="À la recherche d’un stage" badge="Informatique" />
-          <Info icon={Target} title="Stage recherché" sub="Développement • IA • Data • DevOps" badge="Ouverte aux opportunités" />
+          <Info icon={MapPin} title="Mobile" sub="Toulouse et autres régions" badge="Mobilité possible" />
+          <Info icon={Target} title="Stage de fin d’études" sub="À partir de mi-mars • 5 mois minimum" badge="Développement • IA • Data • DevOps" />
           <Info icon={Heart} title="Ce qui me motive" sub="Apprendre, créer, résoudre" badge="Curiosité • Équipe" />
         </section>
 
@@ -253,7 +290,7 @@ function App() {
                 <span>{p.type}</span><div className="fake-visual">{p.icon}</div>
                 <div className="project-number">0{i + 1}</div>
               </div>
-              <div className="project-body"><h3>{p.title}</h3><p>{p.text}</p><div className="tags">{p.tags.map(t => <span key={t}>{t}</span>)}</div></div>
+              <div className="project-body"><h3>{p.title}</h3><p>{p.text}</p><div className="tags">{p.tags.map(t => <span key={t}>{t}</span>)}</div>{p.link && <a className="project-link" href={p.link} target="_blank" rel="noreferrer"><ExternalLink size={14} /> Voir sur GitHub</a>}</div>
             </article>)}
           </div>
         </section>
@@ -277,7 +314,7 @@ function App() {
         </section>
 
         <section id="contact" className="contact section">
-          <div><h2>Une question ? Une opportunité ?</h2><p>N’hésitez pas à me contacter, je serai ravie d’échanger avec vous.</p><a className="contact-btn" href="mailto:doumoutabara@gmail.com"><Mail size={17} /> Me contacter</a></div>
+          <div><h2>Une question ? Une opportunité ?</h2><p>Je recherche un stage de fin d’études de 5 mois minimum à partir de mi-mars et je suis mobile. N’hésitez pas à me contacter, je serai ravie d’échanger avec vous.</p><a className="contact-btn" href="mailto:doumoutabara@gmail.com"><Mail size={17} /> Me contacter</a></div>
           <div className="contact-links">
             <a href="mailto:doumoutabara@gmail.com"><Mail /> doumoutabara@gmail.com</a>
             <a href="https://www.linkedin.com/in/tabara/" target="_blank" rel="noreferrer"><ExternalLink /> LinkedIn</a>
