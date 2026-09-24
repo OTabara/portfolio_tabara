@@ -116,6 +116,18 @@ function App() {
             <div className="portrait-frame">
               <img src="/images/oumou.jpg" alt="Portrait d'Oumou Tabara Diallo" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement.classList.add('empty'); }} />
               <div className="portrait-fallback">Ta photo ici</div>
+              <div className="code-overlay" style={{ top: '16px', right: '14px', left: 'auto', bottom: 'auto', width: '190px', borderRadius: 0 }} aria-label="Extrait de code">
+                <div className="code-header" aria-hidden="true">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <pre>{`const developer = {
+  name: "Oumou",
+  skills: ["Data", "IA", "Dev"],
+  passion: true
+};`}</pre>
+              </div>
             </div>
             <div className="hand-note note-one">Code<br />Data<br />AI ✦</div>
             <div className="mini-card card-one"><span>▥</span><small>Analytics</small></div>
