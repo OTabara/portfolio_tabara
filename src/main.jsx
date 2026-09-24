@@ -168,8 +168,11 @@ function App() {
             <div className="association-header">
               <div className="association-logo">AJEGT</div>
 
-              <div>
-                <h3>Association des Jeunes et Étudiants Guinéens de Toulouse</h3>
+              <div className="association-meta">
+                <div className="association-title-row">
+                  <h3>Association des Jeunes et Étudiants Guinéens de Toulouse</h3>
+                  <span className="association-mini"><Users size={14} /></span>
+                </div>
                 <p>AJEGT · Toulouse</p>
               </div>
             </div>
